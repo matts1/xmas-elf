@@ -53,6 +53,9 @@ pub enum Tag<P> {
     PreInitArray,
     PreInitArraySize,
     SymTabShIndex,
+    RelrSize,
+    Relr,
+    RelrEnt,
     Flags1,
     OsSpecific(P),
     ProcessorSpecific(P),
@@ -83,6 +86,8 @@ macro_rules! impls {
                     | Tag::RunPath
                     | Tag::Flags
                     | Tag::PreInitArraySize
+                    | Tag::RelrSize
+                    | Tag::RelrEnt
                     | Tag::Flags1
                     | Tag::OsSpecific(_)
                     | Tag::ProcessorSpecific(_) => Ok(self.un),
@@ -106,6 +111,7 @@ macro_rules! impls {
                     | Tag::FiniArray
                     | Tag::PreInitArray
                     | Tag::SymTabShIndex
+                    | Tag::Relr
                     | Tag::OsSpecific(_)
                     | Tag::ProcessorSpecific(_) => Ok(self.un),
                     _ => Err("Invalid ptr"),
@@ -150,6 +156,9 @@ macro_rules! impls {
                     32 => Ok(Tag::PreInitArray),
                     33 => Ok(Tag::PreInitArraySize),
                     34 => Ok(Tag::SymTabShIndex),
+                    35 => Ok(Tag::RelrSize),
+                    36 => Ok(Tag::Relr),
+                    37 => Ok(Tag::RelrEnt),
                     0x6ffffffb => Ok(Tag::Flags1),
                     t if t >= 0x6000000D && t <= 0x6fffffff => Ok(Tag::OsSpecific(t)),
                     t if t >= 0x70000000 && t <= 0x7fffffff => Ok(Tag::ProcessorSpecific(t)),
